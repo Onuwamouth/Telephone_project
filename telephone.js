@@ -6,12 +6,13 @@ class Telephone {
 
   AddPhoneNumber(phoneNumber) {
     this.phoneNumbers.push(phoneNumber);
-    this.notifyObservers();
   }
 
   RemovePhoneNumber(phoneNumber) {
-    this.phoneNumbers = this.phoneNumbers.filter((number) => number !== phoneNumber);
-    this.notifyObservers();
+    const index = this.phoneNumbers.indexOf(phoneNumber);
+    if (index > -1) {
+      this.phoneNumbers.splice(index, 1);
+    }
   }
 
   DialPhoneNumber(phoneNumber) {
@@ -23,16 +24,21 @@ class Telephone {
   }
 
   removeObserver(observer) {
-    this.observers = this.observers.filter((obs) => obs !== observer);
+    const index = this.observers.indexOf(observer);
+    if (index > -1) {
+      this.observers.splice(index, 1);
+    }
   }
 
   notifyObservers(phoneNumber) {
-    this.observers.forEach((observer) => observer.update(phoneNumber));
+    this.observers.forEach((observer) => {
+      observer.update(phoneNumber);
+    });
   }
 }
 
 class Observer {
-  constructor() {}
+  constructor() { }
 
   update(phoneNumber) {
     console.log(phoneNumber);
@@ -40,12 +46,8 @@ class Observer {
 }
 
 const telephone = new Telephone();
-
 const observer1 = new Observer();
 const observer2 = new Observer();
-
 telephone.addObserver(observer1);
 telephone.addObserver(observer2);
-
-telephone.AddPhoneNumber("+2348162450569");
 telephone.DialPhoneNumber("+2348162450569");
